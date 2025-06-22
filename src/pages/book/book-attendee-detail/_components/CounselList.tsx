@@ -38,7 +38,8 @@ const CounselList = (args: CounselListProps) => {
           src="/images/icons/ico-pencil.svg"
           width={20}
           height={20}
-          alt=""
+          alt="상담내역 수정 아이콘"
+          loading="lazy"
           onClick={() => {
             navigate(
               `/book/${bookId}/attendee/${attendeeId}/counselling${location.search}`,

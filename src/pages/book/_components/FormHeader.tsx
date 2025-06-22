@@ -18,6 +18,7 @@ export default function FormHeader({ isStep2, text }: FormHeaderProps) {
           width={32}
           height={32}
           onClick={() => navigate(-1)}
+          loading="lazy"
         />
       </div>
       <div className="flex gap-2 w-full justify-center">

@@ -11,6 +11,7 @@ export default function FormHeader({ studentName }: { studentName: string }) {
         <img
           src="/images/icons/book-create/ico-close.svg"
           alt="닫기 아이콘"
+          loading="lazy"
           width={32}
           height={32}
           onClick={() => navigate(-1)}

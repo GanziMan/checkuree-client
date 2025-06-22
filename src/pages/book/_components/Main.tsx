@@ -53,6 +53,7 @@ function Book({
         src={'/images/img-test.png'}
         className="w-full h-[97px] rounded-t-2xl"
         alt="출석부 이미지"
+        loading="lazy"
       />
       <div className="flex flex-col gap-2 px-3 py-4 text-left rounded-b-2xl h-[98px] bg-white">
         <div className="flex gap-2">

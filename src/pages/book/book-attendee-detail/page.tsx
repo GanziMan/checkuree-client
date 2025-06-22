@@ -71,6 +71,7 @@ export default function Page() {
           alt="닫기 아이콘"
           width={14}
           height={14}
+          loading="lazy"
           onClick={() =>
             navigate(
               location.state?.from ||

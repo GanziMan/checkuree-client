@@ -107,6 +107,7 @@ export default function SubjectSelectionDrawer({
                       onChangeGrade(subjectItem.id)
                       handleBottomDrawer(false)
                     }}
+                    loading="lazy"
                   />
                 </li>
               ))}

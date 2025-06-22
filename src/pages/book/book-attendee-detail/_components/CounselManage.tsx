@@ -31,6 +31,7 @@ export default function CounselManage(props: CounselManageProps) {
           alt="학생 아이콘"
           width={40}
           height={40}
+          loading="lazy"
           className="rounded-full ml-[23px]"
         />
         <div className="flex flex-col gap-2 text-left">

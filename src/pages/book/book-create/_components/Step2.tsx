@@ -140,6 +140,7 @@ export default function Step2(props: GradeItemProps) {
                         <img
                           src="/images/icons/book-create/ico-close-gray.svg"
                           alt="닫기 아이콘"
+                          loading="lazy"
                           width={32}
                           height={32}
                           onClick={() => {
@@ -173,7 +174,7 @@ export default function Step2(props: GradeItemProps) {
                       alt="이미지 추가 아이 콘"
                       width={15}
                       height={15}
-                      className=""
+                      loading="lazy"
                     />
                     <p className="text-s-medium text-border-secondary-hover">
                       과목 추가하기

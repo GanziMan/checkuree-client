@@ -120,6 +120,7 @@ export default function StudentManage(props: StudentManageProps) {
         <img
           src="/images/icons/book-roaster/ico-student.svg"
           alt="학생 아이콘"
+          loading="lazy"
           width={80}
           height={80}
           className="rounded-full ml-[23px]"
@@ -159,7 +160,7 @@ export default function StudentManage(props: StudentManageProps) {
               src="/images/icons/ico-pencil.svg"
               width={20}
               height={20}
-              alt=""
+              alt="수정 아이콘"
               onClick={() => {
                 navigate(
                   `/book/${bookId}/attendee/${attendeeId}/schedule${location.search}`,

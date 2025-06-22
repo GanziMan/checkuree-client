@@ -93,6 +93,7 @@ export default function SubjectSelectionDrawer({
                     alt="플러스 아이콘"
                     width={19}
                     height={19}
+                    loading="lazy"
                     onClick={() => {
                       setSelectedSubjectItems({
                         subjectItemId: subjectItem.id,

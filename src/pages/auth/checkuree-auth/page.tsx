@@ -61,6 +61,7 @@ export default function Page() {
         width={284}
         height={48}
         alt="로고 이미지"
+        loading="lazy"
       />
       <form
         className="flex flex-col gap-6 justify-center w-full"
@@ -105,6 +106,7 @@ export default function Page() {
                 height={24}
                 alt="로그인 유지 체크"
                 onClick={() => setShowPassword(!showPassword)}
+                loading="lazy"
               />
             </div>
 
@@ -120,6 +122,7 @@ export default function Page() {
               width={20}
               height={20}
               alt="로그인 유지 체크"
+              loading="lazy"
             />
 
             <p className="font-medium text-[#5D5D5D]">로그인 유지</p>

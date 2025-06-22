@@ -41,6 +41,7 @@ export default function Page() {
             height={18}
             alt="카카오 심볼 로고"
             className="absolute left-4"
+            loading="lazy"
           />
 
           {/* font 적용 */}

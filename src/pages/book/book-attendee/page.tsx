@@ -96,6 +96,7 @@ export default function Page() {
             alt="체쿠리 에러 아이콘"
             width={45}
             height={45}
+            loading="lazy"
           />
           <p className="text-s-medium text-[#B0B0B0]">
             등록된 학생이 없습니다.

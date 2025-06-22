@@ -52,6 +52,7 @@ export default function LearningManage(props: LearningManageProps) {
           alt="학생 아이콘"
           width={40}
           height={40}
+          loading="lazy"
           className="rounded-full ml-[23px]"
         />
         <div className="flex flex-col gap-1 text-left">
@@ -69,9 +70,7 @@ export default function LearningManage(props: LearningManageProps) {
       </div>
 
       <div className="w-full rounded-2xl bg-white p-4 flex flex-col gap-5">
-        <p className="flex text-s-bold text-[#5d5d5d]">
-          커리큘럼 정보 <img src="" alt="" />
-        </p>
+        <p className="flex text-s-bold text-[#5d5d5d]">커리큘럼 정보</p>
         {progresses?.map((progress) => (
           <Fragment key={progress.id}>
             <div className="flex items-center justify-between text-s-semibold">
