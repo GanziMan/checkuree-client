@@ -11,9 +11,10 @@ import { Associates, RelationType } from '@/api/type'
 import { createCounsellings, updateCounsellings } from '@/api/CounselApiClient'
 import { CounsellingSchema, CreateCounsellingSchema } from '../_schema'
 import FormHeader from './_components/FormHeader'
-import CounsellingCreateForm from './_components/CounsellingCreateForm'
+
 import Button from '@/components/Button'
 import tw from 'tailwind-styled-components'
+import CounsellingCreateForm from './_components/CounsellingCreateForm'
 
 export default function CounsellingCreate() {
   const navigate = useNavigate()

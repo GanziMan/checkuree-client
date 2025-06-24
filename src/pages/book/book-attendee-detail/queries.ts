@@ -172,6 +172,12 @@ export const useProgressPromote = ({
       queryClient.invalidateQueries({
         queryKey: attendeeKeys.progressLog(bookId, attendeeId).queryKey,
       })
+      queryClient.invalidateQueries({
+        queryKey: attendeeKeys.detail(bookId, attendeeId).queryKey,
+      })
+      // queryClient.invalidateQueries({
+      //   queryKey: attendeeKeys.courses(bookId).queryKey,
+      // })
     },
     onError: handleError,
   })

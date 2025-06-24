@@ -3,7 +3,7 @@ import {
   AttendeeStatisticType,
   DayOfWeek,
   dayMap,
-} from "@/api/type";
+} from '@/api/type'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,9 +13,10 @@ import {
   Tooltip,
   Legend,
   Align,
-} from "chart.js";
+} from 'chart.js'
 
-import { Bar } from "react-chartjs-2";
+import { Bar } from 'react-chartjs-2'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 ChartJS.register(
   CategoryScale,
@@ -23,21 +24,22 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
-);
+  Legend,
+  ChartDataLabels,
+)
 
 function BarChart({
   labels,
   statisticData,
 }: {
-  labels: string[];
-  statisticData: number[];
+  labels: string[]
+  statisticData: number[]
 }) {
-  const maxIndex = statisticData.indexOf(Math.max(...statisticData));
+  const maxIndex = statisticData.indexOf(Math.max(...statisticData))
 
-  const backgroundColor = new Array(statisticData.length).fill("#BDDDC3");
+  const backgroundColor = new Array(statisticData.length).fill('#BDDDC3')
 
-  backgroundColor[maxIndex] = "#59996B";
+  backgroundColor[maxIndex] = '#59996B'
 
   const data = {
     labels,
@@ -47,8 +49,8 @@ function BarChart({
         backgroundColor: backgroundColor,
 
         datalabels: {
-          align: "end" as Align,
-          anchor: "end" as Align,
+          align: 'end' as Align,
+          anchor: 'end' as Align,
         },
 
         barThickness: 32, // 막대 너비 설정 (px)
@@ -60,7 +62,7 @@ function BarChart({
         },
       },
     ],
-  };
+  }
   const options = {
     layout: {
       padding: {
@@ -72,11 +74,14 @@ function BarChart({
         display: false,
       },
       tooltip: {
-        backgroundColor: "white",
-        bodyColor: "#424242",
-        titleColor: "#424242",
+        backgroundColor: 'white',
+        bodyColor: '#424242',
+        titleColor: '#424242',
         displayColors: false,
         padding: 10,
+      },
+      datalabels: {
+        display: (ctx: any) => ctx.dataset.data[ctx.dataIndex] !== 0,
       },
     },
     // aspectRatio: 10,
@@ -100,77 +105,69 @@ function BarChart({
         },
       },
     },
-  };
+  }
   return (
-    <div style={{ width: "100%", height: 284 }}>
+    <div style={{ width: '100%', height: 284 }}>
       <Bar data={data} options={options} />
     </div>
-  );
+  )
 }
 
 export function CategoryChart({
   statisticData,
   tab,
 }: {
-  statisticData: AttendeeStatisticType;
-  tab: AttendeeStatisticsType;
+  statisticData: AttendeeStatisticType
+  tab: AttendeeStatisticsType
 }) {
-  let order: string[] = [];
   let sortedData: {
-    name: string;
-    count: number;
-  }[] = [];
-  let labels: string[] = [];
-  let data: number[] = [];
+    name: string
+    count: number
+  }[] = []
+  let labels: string[] = []
+  let data: number[] = []
   const labelsSwitch = (tab: AttendeeStatisticsType) => {
     switch (tab) {
-      case "DAY":
-        order = [
-          "MONDAY",
-          "TUESDAY",
-          "WEDNESDAY",
-          "THURSDAY",
-          "FRIDAY",
-          "SATURDAY",
-          "SUNDAY",
-        ];
+      case 'DAY':
+        const order = [
+          'MONDAY',
+          'TUESDAY',
+          'WEDNESDAY',
+          'THURSDAY',
+          'FRIDAY',
+          'SATURDAY',
+          'SUNDAY',
+        ]
         sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => dayMap[data.name as DayOfWeek]);
-        data = sortedData.map((data) => data.count);
+          return order.indexOf(a.name) - order.indexOf(b.name)
+        })
+        labels = sortedData.map((data) => dayMap[data.name as DayOfWeek])
+        data = sortedData.map((data) => data.count)
         return {
           data,
           labels,
-        };
-      case "AGE":
-        order = ["유아", "초등저학년", "중등부", "성인부"];
-        sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => data.name);
-        data = sortedData.map((data) => data.count);
+        }
+      case 'AGE':
+        labels = statisticData.contents.map((data) => data.name)
+        data = statisticData.contents.map((data) => data.count)
         return {
           data,
           labels,
-        };
-      case "CURRICULUM":
-        sortedData = statisticData.contents.sort((a, b) => {
-          return order.indexOf(a.name) - order.indexOf(b.name);
-        });
-        labels = sortedData.map((data) => data.name);
-        data = sortedData.map((data) => data.count);
+        }
+      case 'CURRICULUM':
+        labels = statisticData.contents.map((data) => data.name)
+        data = statisticData.contents.map((data) => data.count)
         return {
           labels,
           data,
-        };
+        }
     }
-  };
+  }
 
   return (
     <BarChart
       labels={labelsSwitch(tab).labels}
       statisticData={labelsSwitch(tab).data}
     />
-  );
+  )
 }

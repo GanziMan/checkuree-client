@@ -1,10 +1,9 @@
 import React from 'react'
 import { useBookCourses } from '../queries'
-import useProgressFormStore, {
-  NextProgressFormData,
-} from '@/store/progressStore'
+import useProgressFormStore from '@/store/progressStore'
 import FieldTitle from '@/components/FieldTitle'
 import NextProgressSelect from './NextProgressSelect'
+
 interface Props {
   bookId: number
 }

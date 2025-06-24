@@ -17,7 +17,7 @@ import { twMerge } from 'tailwind-merge'
 import { AttendeeRecord, STATUS } from '@/api/type'
 import Button from '@/components/Button'
 
-type AttendanceManageProps = {
+export type AttendanceManageProps = {
   studentInfo: {
     name: string
     age: number

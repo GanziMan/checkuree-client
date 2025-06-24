@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Associates } from '@/api/type'
 import Button from '@/components/Button'
 
-type CounselManageProps = {
+export type CounselManageProps = {
   studentInfo: {
     name: string
     age: number

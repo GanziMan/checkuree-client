@@ -73,7 +73,7 @@ type studentInfo = {
   enrollDate: string
 }
 
-type StudentManageProps = {
+export type StudentManageProps = {
   student: studentInfo
   lessonInfo: Progresses
   registerInfo: {

@@ -7,7 +7,7 @@ import useProgressFormStore from '@/store/progressStore'
 import { Progresses } from '@/api/type'
 import Button from '@/components/Button'
 
-type LearningManageProps = {
+export type LearningManageProps = {
   studentInfo: {
     name: string
     age: number
@@ -28,9 +28,8 @@ export default function LearningManage(props: LearningManageProps) {
 
   const openModal = useModalStore((state) => state.openModal)
 
-  const { formData } = useProgressFormStore()
+  const { formData, setFormData } = useProgressFormStore()
 
-  // TODO: mutation 후 데이터 최신작업 필요
   const { mutate: progressMutation } = useProgressPromote({
     bookId: Number(bookId),
     formData,
@@ -38,9 +37,24 @@ export default function LearningManage(props: LearningManageProps) {
   })
 
   const openNextProgressModal = (progressId: number) => {
-    openModal(<NextProgressModal bookId={Number(bookId)} />, () => {
-      progressMutation(progressId)
-    })
+    openModal(
+      <NextProgressModal bookId={Number(bookId)} />,
+      () => {
+        progressMutation(progressId)
+        setFormData({
+          nextGradeId: '',
+          completeAt: '',
+          startAt: '',
+        })
+      },
+      () => {
+        setFormData({
+          nextGradeId: '',
+          completeAt: '',
+          startAt: '',
+        })
+      },
+    )
   }
 
   return (
@@ -113,11 +127,34 @@ export default function LearningManage(props: LearningManageProps) {
                 {progress.endedAt.substring(5).replaceAll('-', '.')}
               </div>
               <div className="text-center">{progress.lessonCount}</div>
-              <div className="text-center">2주</div>
+              <div className="text-center">
+                {formatDuration(progress.startedAt, progress.endedAt)}
+              </div>
             </div>
           ))}
         </div>
       </div>
     </div>
   )
+}
+
+function formatDuration(startedAt: string, endedAt: string): string {
+  const startDate = new Date(startedAt)
+  const endDate = new Date(endedAt)
+
+  // 하루 차이 계산 (UTC 기준 보정)
+  const diffTime = endDate.getTime() - startDate.getTime()
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1
+
+  const weeks = Math.floor(diffDays / 7)
+  const days = diffDays % 7
+
+  let result = ''
+  if (weeks > 0) {
+    result += `${weeks}주`
+  }
+  if (days > 0) {
+    result += ` ${days}일`
+  }
+  return result.trim()
 }
