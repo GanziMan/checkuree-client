@@ -20,7 +20,6 @@ const colors = {
 
   // Border colors
   'border-brand': '#59996b',
-  'border-info': '#59996b',
   'border-danger': '#ea5353',
   'border-disabled': '#b0b0b0',
   'border-warning': '#f2bd2d',
@@ -30,6 +29,7 @@ const colors = {
   'border-secondary': '#d1d1d1',
   'border-secondary-hover': '#b0b0b0',
   'border-secondary-press': '#888888',
+  'border-interactive-secondary': '#e7e7e7',
 
   // Text colors
   'text-primary': '#171717',

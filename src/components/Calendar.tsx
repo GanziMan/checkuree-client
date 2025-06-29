@@ -11,8 +11,10 @@ import {
 } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { ko } from 'date-fns/locale'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
 import RightArrowIcon from '@/assets/icons/ico-arrow-right.svg?react'
+import DownArrowIcon from '@/assets/icons/ico-arrow-down.svg?react'
 import Button from './Button'
 
 type CalendarProps = {
@@ -35,6 +37,8 @@ export default function Calendar({
 
   const [selectedDay, setSelectedDay] = useState<Date>(value || today)
 
+  const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false)
+
   const lastDayOfMonth = endOfMonth(selectedMonth)
   const additionalPreviousMonth = startOfWeek(selectedMonth, {
     weekStartsOn: 0,
@@ -52,120 +56,198 @@ export default function Calendar({
   }, [value])
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-center h-10 gap-3">
-        <Button
-          aria-label="calendar backward"
-          type="button"
-          className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
-          onClick={() => setSelectedMonth(add(selectedMonth, { months: -1 }))}
-          children={<LeftArrowIcon width={12} height={12} />}
-        />
+    <div className="flex flex-col gap-3">
+      <button
+        type="button"
+        onClick={() => setIsYearSelectorOpen(true)}
+        className="focus:outline-none text-[20px] font-bold text-text-primary cursor-pointer"
+      >
+        {format(selectedDay, 'M월 d일 (E)', { locale: ko })}
+      </button>
 
-        <span className="focus:outline-none text-l-bold text-text-primary">
-          {format(selectedMonth, 'yyyy년 MM월')}
-        </span>
+      <div className="flex justify-between border-t border-border-interactive-secondary h-[42px] pt-0.5">
+        <div
+          className="flex items-center"
+          onClick={() => setIsYearSelectorOpen(true)}
+        >
+          <Button className="focus:outline-none text-s-bold text-text-primary cursor-pointer">
+            {format(selectedMonth, 'yyyy년 MM월')}
+          </Button>
 
-        <Button
-          aria-label="calendar forward"
-          type="button"
-          className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
-          onClick={() => setSelectedMonth(add(selectedMonth, { months: 1 }))}
-          children={<RightArrowIcon width={12} height={12} />}
-        />
+          <DownArrowIcon
+            width={32}
+            height={32}
+            className={`${isYearSelectorOpen ? 'rotate-180' : ''}`}
+          />
+        </div>
+        {!isYearSelectorOpen && (
+          <div className="flex items-center">
+            <Button
+              aria-label="calendar backward"
+              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
+              onClick={() =>
+                setSelectedMonth(add(selectedMonth, { months: -1 }))
+              }
+              children={
+                <LeftArrowIcon width={12} height={12} color="#5d5d5d" />
+              }
+            />
+
+            <Button
+              aria-label="calendar forward"
+              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
+              onClick={() =>
+                setSelectedMonth(add(selectedMonth, { months: 1 }))
+              }
+              children={
+                <RightArrowIcon width={12} height={12} color="#5d5d5d" />
+              }
+            />
+          </div>
+        )}
       </div>
-      <table className={twMerge('w-full table-fixed', className)}>
-        <thead>
-          <tr>
-            {['일', '월', '화', '수', '목', '금', '토'].map((day) => {
-              return (
-                <th key={day} className="w-1/7">
-                  <div className="w-full h-[30px] flex justify-center items-center">
-                    <p
-                      className={`text-center text-s-semibold ${
-                        day === '일' ? 'text-border-danger' : 'text-[#5d5d5d]'
-                      }`}
-                    >
-                      {day}
-                    </p>
-                  </div>
-                </th>
-              )
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {
-            // 7일씩 끊어서 렌더링
-            dates
-              .reduce((acc, _, index) => {
-                if (index % 7 === 0) {
-                  acc.push(dates.slice(index, index + 7))
-                }
-                return acc
-              }, [] as Date[][])
-              .map((dates, index) => {
+
+      {isYearSelectorOpen && (
+        <YearSelector
+          selectedMonth={selectedMonth}
+          today={today}
+          onSelect={(year) => {
+            setSelectedMonth(new Date(year, selectedMonth.getMonth(), 1))
+            setIsYearSelectorOpen(false)
+          }}
+        />
+      )}
+
+      {!isYearSelectorOpen && (
+        <table className={twMerge('w-full table-fixed', className)}>
+          <thead>
+            <tr>
+              {['일', '월', '화', '수', '목', '금', '토'].map((day) => {
                 return (
-                  <tr key={index}>
-                    {dates.map((date) => {
-                      const isTextColor =
-                        isSameDay(selectedDay, date) &&
-                        'rounded-full w-9 h-9 bg-[#BDDDC3]'
-
-                      const isPast = disableBeforeToday && date < today
-                      const disabledStyle = isPast
-                        ? 'text-text-disabled cursor-not-allowed'
-                        : ''
-
-                      const isTodayMonth =
-                        date.getMonth() === selectedMonth.getMonth()
-                      const holidayColor =
-                        date.getDay() === 0
-                          ? 'text-[#f44336] '
-                          : !isTodayMonth
-                            ? 'text-text-tertiary'
-                            : ''
-                      return (
-                        <td key={date.toString()}>
-                          <div
-                            onClick={() => {
-                              if (
-                                (disableBeforeToday && date < today) ||
-                                !isTodayMonth
-                              )
-                                return
-                              setSelectedDay(date)
-                              handleCurrentDay(date)
-                            }}
-                            className="relative flex justify-center items-center w-full h-[45px]"
-                          >
-                            <p className="relative z-10">
-                              <span
-                                className={twMerge(
-                                  '!text-s-semibold flex items-center justify-center',
-                                  disabledStyle,
-                                  holidayColor,
-                                )}
-                              >
-                                {format(date, 'd')}
-                              </span>
-                            </p>
-                            <p
-                              className={twMerge(
-                                'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0',
-                                isTextColor,
-                              )}
-                            />
-                          </div>
-                        </td>
-                      )
-                    })}
-                  </tr>
+                  <th key={day} className="w-1/7">
+                    <div className="w-full h-[30px] flex justify-center items-center">
+                      <p
+                        className={`text-center text-s-semibold ${
+                          day === '일' ? 'text-border-danger' : 'text-[#5d5d5d]'
+                        }`}
+                      >
+                        {day}
+                      </p>
+                    </div>
+                  </th>
                 )
-              })
-          }
-        </tbody>
-      </table>
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              // 7일씩 끊어서 렌더링
+              dates
+                .reduce((acc, _, index) => {
+                  if (index % 7 === 0) {
+                    acc.push(dates.slice(index, index + 7))
+                  }
+                  return acc
+                }, [] as Date[][])
+                .map((dates, index) => {
+                  return (
+                    <tr key={index}>
+                      {dates.map((date) => {
+                        const isTextColor = isSameDay(date, today)
+                          ? 'rounded-full w-9 h-9 border border-border-brand'
+                          : isSameDay(selectedDay, date) &&
+                            'rounded-full w-9 h-9 bg-[#BDDDC3]'
+
+                        const isPast = disableBeforeToday && date < today
+                        const disabledStyle = isPast
+                          ? 'text-text-disabled cursor-not-allowed'
+                          : ''
+
+                        const isTodayMonth =
+                          date.getMonth() === selectedMonth.getMonth()
+                        const holidayColor =
+                          date.getDay() === 0
+                            ? 'text-[#f44336] '
+                            : !isTodayMonth
+                              ? 'text-text-tertiary'
+                              : ''
+                        return (
+                          <td key={date.toString()}>
+                            <div
+                              onClick={() => {
+                                if (
+                                  (disableBeforeToday && date < today) ||
+                                  !isTodayMonth
+                                )
+                                  return
+                                setSelectedDay(date)
+                                handleCurrentDay(date)
+                              }}
+                              className="relative flex justify-center items-center w-full h-[45px]"
+                            >
+                              <p className="relative z-10">
+                                <span
+                                  className={twMerge(
+                                    '!text-s-semibold flex items-center justify-center',
+                                    disabledStyle,
+                                    holidayColor,
+                                    isSameDay(date, today)
+                                      ? 'text-text-brand'
+                                      : '',
+                                  )}
+                                >
+                                  {format(date, 'd')}
+                                </span>
+                              </p>
+                              <p
+                                className={twMerge(
+                                  'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0',
+                                  isTextColor,
+                                )}
+                              />
+                            </div>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  )
+                })
+            }
+          </tbody>
+        </table>
+      )}
+    </div>
+  )
+}
+
+function YearSelector({
+  selectedMonth,
+  today,
+  onSelect,
+}: {
+  selectedMonth: Date
+  today: Date
+  onSelect: (year: number) => void
+}) {
+  const isActiveYear = (year: number) => {
+    return (
+      year === selectedMonth.getFullYear() ||
+      isSameDay(today, new Date(year, selectedMonth.getMonth(), 1))
+    )
+  }
+  return (
+    <div className="grid grid-cols-3 gap-x-4 gap-y-[10px] py-[5px]">
+      {Array.from({ length: 12 }, (_, i) => 2018 + i).map((year) => (
+        <div
+          key={year}
+          className={`text-center text-text-secondary cursor-pointer text-s-semibold h-10 flex items-center justify-center w-20 mx-auto ${
+            isActiveYear(year) ? 'bg-[#BDDDC3] rounded-full text-[#428758]' : ''
+          }`}
+          onClick={() => onSelect(year)}
+        >
+          {year}
+        </div>
+      ))}
     </div>
   )
 }
