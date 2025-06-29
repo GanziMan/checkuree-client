@@ -36,6 +36,7 @@ export default function Calendar({
   )
 
   const [selectedDay, setSelectedDay] = useState<Date | string>(value || today)
+  const [hasSelection, setHasSelection] = useState(false)
 
   const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false)
 
@@ -56,7 +57,7 @@ export default function Calendar({
   }, [value])
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-4">
       <button
         type="button"
         className="focus:outline-none text-[20px] font-bold text-text-primary cursor-pointer"
@@ -83,7 +84,7 @@ export default function Calendar({
           <div className="flex items-center">
             <Button
               aria-label="calendar backward"
-              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] mr-2"
+              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] h-10 w-10 flex justify-center items-center"
               onClick={() =>
                 setSelectedMonth(add(selectedMonth, { months: -1 }))
               }
@@ -94,7 +95,7 @@ export default function Calendar({
 
             <Button
               aria-label="calendar forward"
-              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] ml-2"
+              className="focus:text-gray-400 hover:text-gray-400 text-[#5d5d5d] w-10 h-10 flex justify-center items-center"
               onClick={() =>
                 setSelectedMonth(add(selectedMonth, { months: 1 }))
               }
@@ -152,10 +153,14 @@ export default function Calendar({
                   return (
                     <tr key={index}>
                       {dates.map((date) => {
-                        const isTextColor = isSameDay(date, today)
-                          ? 'rounded-full w-9 h-9 border border-border-brand'
-                          : isSameDay(selectedDay, date) &&
-                            'rounded-full w-9 h-9 bg-[#BDDDC3]'
+                        const isSelectedDay =
+                          hasSelection && isSameDay(date, selectedDay)
+                        const isTodayDay = isSameDay(date, today)
+                        const isTextColor = isSelectedDay
+                          ? 'rounded-full w-9 h-9 bg-[#BDDDC3]'
+                          : isTodayDay
+                            ? 'rounded-full w-9 h-9 border border-border-brand'
+                            : ''
 
                         const isPast = disableBeforeToday && date < today
                         const disabledStyle = isPast
@@ -179,6 +184,7 @@ export default function Calendar({
                                   !isTodayMonth
                                 )
                                   return
+                                setHasSelection(true)
                                 setSelectedDay(date)
                                 handleCurrentDay(date)
                               }}
@@ -192,7 +198,9 @@ export default function Calendar({
                                     holidayColor,
                                     isSameDay(date, today)
                                       ? 'text-text-brand'
-                                      : '',
+                                      : isSameDay(date, selectedDay)
+                                        ? 'text-text-brand'
+                                        : '',
                                   )}
                                 >
                                   {format(date, 'd')}
