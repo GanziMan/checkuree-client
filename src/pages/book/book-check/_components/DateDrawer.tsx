@@ -8,7 +8,7 @@ type DateDrawerProps = {
   onClose: () => void
   handleCurrentDay: (date: Date) => void
   saveButtonText?: string
-  value?: Date
+  value?: Date | string
   disableBeforeToday?: boolean
 }
 export default function DateDrawer({

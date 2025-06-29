@@ -20,7 +20,7 @@ import Button from './Button'
 type CalendarProps = {
   className?: string
   handleCurrentDay: (date: Date) => void
-  value?: Date
+  value?: Date | string
   disableBeforeToday?: boolean
 }
 
@@ -35,7 +35,7 @@ export default function Calendar({
     startOfMonth(value || today),
   )
 
-  const [selectedDay, setSelectedDay] = useState<Date>(value || today)
+  const [selectedDay, setSelectedDay] = useState<Date | string>(value || today)
 
   const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false)
 
