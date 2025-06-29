@@ -113,6 +113,7 @@ export default function Header(props: HeaderProps) {
           height={12}
           onClick={handlePreviousDay}
           className="cursor-pointer"
+          color="#888888"
         />
         <div
           className="flex items-center cursor-pointer select-none"
@@ -128,6 +129,7 @@ export default function Header(props: HeaderProps) {
           height={12}
           onClick={handleNextDay}
           className="cursor-pointer"
+          color="#888888"
         />
       </div>
       {/* SubHeader */}

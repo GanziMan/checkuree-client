@@ -22,7 +22,7 @@ export default function Page() {
   const [attendRateTab, setAttendRateTab] = useState<PeriodType>('DAILY')
   const [categoryTab, setCategoryTab] = useState<AttendeeStatisticsType>('DAY')
   const [currentDate, setCurrentDate] = useState(dayjs()) // dayjs로 초기화
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const handlePreviousDay = () => {
     setCurrentDate((prev) => prev.subtract(1, 'day'))
@@ -58,6 +58,7 @@ export default function Page() {
           height={12}
           onClick={handlePreviousDay}
           className="cursor-pointer"
+          color="#888888"
         />
         <div
           className="flex items-center cursor-pointer select-none"
@@ -73,6 +74,7 @@ export default function Page() {
           height={12}
           onClick={handleNextDay}
           className="cursor-pointer"
+          color="#888888"
         />
       </div>
       <div className="w-full h-screen flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
