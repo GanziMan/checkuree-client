@@ -244,6 +244,8 @@ function YearSelector({
     )
   }
 
+  // 렌더링 연도
+  // 만일 연도가 많아지게되면 virtualized 리스트로 변경하는 것을 고려해볼 수 있다.
   const renderYear = (year: number) => {
     const isActive = isActiveYear(year)
     return (
