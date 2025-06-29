@@ -9,7 +9,7 @@ import {
   startOfWeek,
   isSameDay,
 } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ko } from 'date-fns/locale'
 import LeftArrowIcon from '@/assets/icons/ico-arrow-left.svg?react'
@@ -59,7 +59,6 @@ export default function Calendar({
     <div className="flex flex-col gap-3">
       <button
         type="button"
-        onClick={() => setIsYearSelectorOpen(true)}
         className="focus:outline-none text-[20px] font-bold text-text-primary cursor-pointer"
       >
         {format(selectedDay, 'M월 d일 (E)', { locale: ko })}
@@ -229,25 +228,41 @@ function YearSelector({
   today: Date
   onSelect: (year: number) => void
 }) {
+  const currentYearRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    currentYearRef.current?.scrollIntoView({
+      behavior: 'auto',
+      block: 'center',
+    })
+  }, [])
+
   const isActiveYear = (year: number) => {
     return (
       year === selectedMonth.getFullYear() ||
       isSameDay(today, new Date(year, selectedMonth.getMonth(), 1))
     )
   }
+
+  const renderYear = (year: number) => {
+    const isActive = isActiveYear(year)
+    return (
+      <div
+        key={year}
+        ref={isActive ? currentYearRef : null}
+        className={`text-center text-text-secondary cursor-pointer text-s-semibold h-10 flex items-center justify-center w-20 mx-auto ${
+          isActive ? 'bg-[#BDDDC3] rounded-full text-[#428758]' : ''
+        }`}
+        onClick={() => onSelect(year)}
+      >
+        {year}
+      </div>
+    )
+  }
+
   return (
-    <div className="grid grid-cols-3 gap-x-4 gap-y-[10px] py-[5px]">
-      {Array.from({ length: 12 }, (_, i) => 2018 + i).map((year) => (
-        <div
-          key={year}
-          className={`text-center text-text-secondary cursor-pointer text-s-semibold h-10 flex items-center justify-center w-20 mx-auto ${
-            isActiveYear(year) ? 'bg-[#BDDDC3] rounded-full text-[#428758]' : ''
-          }`}
-          onClick={() => onSelect(year)}
-        >
-          {year}
-        </div>
-      ))}
+    <div className="grid grid-cols-3 gap-x-4 gap-y-[10px] py-[5px] h-[200px] overflow-y-auto">
+      {Array.from({ length: 81 }, (_, i) => renderYear(2018 - 69 + i))}
     </div>
   )
 }
