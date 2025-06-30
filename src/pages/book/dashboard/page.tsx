@@ -77,7 +77,7 @@ export default function Page() {
           color="#888888"
         />
       </div>
-      <div className="w-full h-screen flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
+      <div className="min-h-screen flex-1 bg-bg-secondary flex flex-col gap-4 p-4">
         <AttendanceRateChart
           statisticData={statisticData!}
           currentDate={currentDate}
@@ -90,7 +90,6 @@ export default function Page() {
           tabChange={(tab: AttendeeStatisticsType) => setCategoryTab(tab)}
           tab={categoryTab}
         />
-
         <div className="h-[92px]" />
       </div>
       <DateDrawer
